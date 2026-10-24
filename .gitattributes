@@ -1,0 +1,7 @@
+# Keep release inputs byte-stable across Windows and GitHub-hosted builders.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.zip binary
+*.unitypackage binary

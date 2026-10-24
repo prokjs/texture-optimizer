@@ -1,0 +1,87 @@
+name: Publish release and VPM Pages
+
+# Intentionally manual-only: the initial locally published release must not
+# trigger a second release when its tag is pushed.
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Existing tag version without v prefix (must match package.json)'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: texture-optimizer-release-pages
+  cancel-in-progress: false
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check out the existing release tag
+        uses: actions/checkout@v4
+        with:
+          ref: refs/tags/v${{ inputs.version }}
+          fetch-depth: 0
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Preserve the currently published VPM version history
+        env:
+          REPOSITORY_OWNER: ${{ github.repository_owner }}
+          REPOSITORY_NAME: ${{ github.event.repository.name }}
+        run: |
+          owner="${REPOSITORY_OWNER,,}"
+          curl --fail --silent --show-error --location \
+            "https://${owner}.github.io/${REPOSITORY_NAME}/index.json" \
+            --output "$RUNNER_TEMP/previous-listing.json"
+      - name: Build allowlisted deterministic artifacts
+        env:
+          RELEASE_VERSION: ${{ inputs.version }}
+          REPOSITORY_URL: https://github.com/${{ github.repository }}
+        run: |
+          python Tools/build_release.py \
+            --repo-url "$REPOSITORY_URL" \
+            --version "$RELEASE_VERSION" \
+            --previous-listing "$RUNNER_TEMP/previous-listing.json"
+      - name: Keep release artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ inputs.version }}
+          path: dist/*
+          if-no-files-found: error
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Stage Pages site
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: Website
+      - name: Publish release (fails rather than replacing an existing release)
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+          RELEASE_VERSION: ${{ inputs.version }}
+        run: |
+          gh release create "v${RELEASE_VERSION}" \
+            "dist/com.prokjs.texture-optimizer-${RELEASE_VERSION}.zip" \
+            "dist/prokjs-texture-optimizer-${RELEASE_VERSION}.unitypackage" \
+            dist/SHA256SUMS.txt \
+            --verify-tag --title "Texture Optimizer v${RELEASE_VERSION}" \
+            --generate-notes
+
+  deploy-pages:
+    needs: release
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Deploy VPM listing and installation page
+        id: deployment
+        uses: actions/deploy-pages@v4

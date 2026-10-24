@@ -1,0 +1,31 @@
+# Generated release artifacts and Python caches
+/dist/
+__pycache__/
+*.py[cod]
+
+# Local Unity development projects and caches
+/[Ll]ibrary/
+/[Tt]emp/
+/[Oo]bj/
+/[Ll]ogs/
+/[Uu]ser[Ss]ettings/
+/[Pp]roject[Ss]ettings/
+/[Pp]ackages/
+/[Bb]uild/
+/[Bb]uilds/
+
+# Local IDE, operating-system, and authentication files
+.vs/
+.idea/
+.vscode/
+*.csproj
+*.sln
+*.suo
+*.user
+.DS_Store
+Thumbs.db
+.env
+.env.*
+*.pfx
+*.p12
+*.key

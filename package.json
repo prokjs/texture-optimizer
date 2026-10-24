@@ -1,0 +1,21 @@
+{
+  "name": "com.prokjs.texture-optimizer",
+  "version": "1.0.0",
+  "displayName": "prokjs Texture Optimizer",
+  "url": "https://github.com/prokjs/texture-optimizer/releases/download/v1.0.0/com.prokjs.texture-optimizer-1.0.0.zip",
+  "description": "Standalone editor tools for inspecting texture memory and applying reversible texture import optimizations.",
+  "unity": "2022.3",
+  "license": "MIT",
+  "author": {
+    "name": "prokjs",
+    "email": "prokjs@users.noreply.github.com",
+    "url": "https://github.com/prokjs"
+  },
+  "dependencies": {
+    "com.unity.ugui": "1.0.0"
+  },
+  "keywords": ["editor", "texture", "optimization", "vram"],
+  "documentationUrl": "https://github.com/prokjs/texture-optimizer#readme",
+  "changelogUrl": "https://github.com/prokjs/texture-optimizer/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/prokjs/texture-optimizer/blob/main/LICENSE"
+}
