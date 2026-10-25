@@ -29,11 +29,45 @@
           "changelogUrl": "https://github.com/prokjs/texture-optimizer/blob/main/CHANGELOG.md",
           "licensesUrl": "https://github.com/prokjs/texture-optimizer/blob/main/LICENSE",
           "zipSHA256": "06159bae621099d715c8863d7f013cd09761a3d9f5bcef5fa39804b5759f0972"
+        },
+        "1.1.0": {
+          "name": "com.prokjs.texture-optimizer",
+          "version": "1.1.0",
+          "displayName": "prokjs's VRChat World Optimizer",
+          "url": "https://github.com/prokjs/texture-optimizer/releases/download/v1.1.0/com.prokjs.texture-optimizer-1.1.0.zip",
+          "description": "Editor-only VRChat world optimization: reversible texture optimization, conservative mesh LOD analysis and generation, static occlusion setup, and floor-shadow lighting preparation with explicit bake controls.",
+          "unity": "2022.3",
+          "license": "MIT",
+          "author": {
+            "name": "prokjs",
+            "email": "prokjs@users.noreply.github.com",
+            "url": "https://github.com/prokjs"
+          },
+          "dependencies": {
+            "com.unity.ugui": "1.0.0"
+          },
+          "keywords": [
+            "editor",
+            "vrchat",
+            "world",
+            "texture",
+            "optimization",
+            "vram",
+            "lod",
+            "mesh",
+            "occlusion",
+            "lighting",
+            "shadows"
+          ],
+          "documentationUrl": "https://github.com/prokjs/texture-optimizer#readme",
+          "changelogUrl": "https://github.com/prokjs/texture-optimizer/blob/main/CHANGELOG.md",
+          "licensesUrl": "https://github.com/prokjs/texture-optimizer/blob/main/LICENSE",
+          "zipSHA256": "c5ed410384bd8119bb6a12e3f5607c7c8edcf3280eeb6e5fb782279433356ae8"
         }
       }
     }
   },
-  "name": "prokjs Texture Optimizer",
+  "name": "prokjs's VRChat World Optimizer",
   "url": "https://prokjs.github.io/texture-optimizer/index.json",
   "author": "prokjs"
 }

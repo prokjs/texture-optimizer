@@ -1,5 +1,17 @@
 # Changelog
 
+## [1.1.0] — 2026-10-25
+
+- Rebranded as **prokjs's VRChat World Optimizer** with one **Tools → prokjs → VRChat World Optimizer** window: **Textures**, **LOD & Analysis**, **Occlusion & Shadows**.
+- Preserved repository, `com.prokjs.texture-optimizer` identity, `Prokjs.TextureOptimizer` namespace and existing texture backup directory for upgrades.
+- Added static scene recommendations, existing-LOD Inspector preview, and explicit preview/apply automatic LOD generation for conservative fixed opaque candidates. LOD0 is preserved; vertex-removal targets are approximate and topology-constrained. Original meshes/UV/material assets/colliders are not rewritten.
+- Added static-flag preparation for occlusion and existing-UV2/GI floor shadows, with separate Unity bake controls. Occlusion requires a bake; lighting bake is explicitly confirmed, scene-wide, cancelable and potentially long-running. No UV2 generation, light conversion or runtime tarp-controller changes.
+- Added Undo/batch restore for scene changes. Generated mesh assets remain after restore for Undo/reference safety; restored flags do not restore baked lighting data.
+- Retained imported-texture cap workflow and added guarded Default-only pixel reduction for standalone RGBA32/DXT1/DXT5 Texture2D `.asset` files, with original-byte backup and conflict-aware restore.
+- Updated English, Korean and Japanese guidance. Analysis and memory figures remain estimates, not profiler results or performance promises.
+
+[1.1.0]: https://github.com/prokjs/texture-optimizer/releases/tag/v1.1.0
+
 ## [1.0.0] — 2026-10-24
 
 Initial standalone release of **Texture Optimizer** by prokjs.

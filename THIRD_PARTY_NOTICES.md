@@ -2,11 +2,11 @@
 
 ## Inspiration: Thry's VRAM Checker
 
-Texture Optimizer is independently implemented by **prokjs** and inspired by **Thry's VRAM Checker**, part of [Thry's Avatar Performance Tools](https://github.com/Thryrallo/VRC-Avatar-Performance-Tools) by **Thryrallo**.
+**prokjs's VRChat World Optimizer** (formerly Texture Optimizer) is independently implemented by **prokjs**. Its texture workflow is inspired by **Thry's VRAM Checker**, part of [Thry's Avatar Performance Tools](https://github.com/Thryrallo/VRC-Avatar-Performance-Tools) by **Thryrallo**.
 
 This is a separate project. It was not reverse engineered from or copied from the upstream implementation. It is not affiliated with, maintained by, or endorsed by Thryrallo or the upstream project. References to upstream names identify and credit the inspiration; they do not imply sponsorship.
 
-The upstream project publishes an MIT license. Its notice is reproduced below for clear attribution and reference, not as an assertion that upstream source code is included in this package or that prokjs owns upstream work. The independently authored Texture Optimizer code is covered by this repository's [MIT license](LICENSE), copyright (c) 2026 prokjs.
+The upstream project publishes an MIT license. Its notice is reproduced below for attribution and reference, not to assert that upstream source code is included or that prokjs owns upstream work. This repository's independently authored code is covered by its [MIT license](LICENSE), copyright (c) 2026 prokjs.
 
 Source: [upstream LICENSE](https://github.com/Thryrallo/VRC-Avatar-Performance-Tools/blob/master/LICENSE).
 
@@ -33,6 +33,10 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
+
+## Mesh reduction
+
+The LOD mesh reducer is originally authored for this project. No third-party mesh-reduction implementation or vendored mesh-reduction dependency is included. It is covered by this repository's MIT license.
 
 ## Unity dependency
 

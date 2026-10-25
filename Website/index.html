@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Standalone Unity editor texture inspection and reversible import optimization by prokjs.">
-<title>prokjs Texture Optimizer</title>
+<meta name="description" content="Editor-only VRChat world texture optimization, LOD analysis and generation, occlusion setup and floor-shadow lighting controls by prokjs.">
+<title>prokjs's VRChat World Optimizer</title>
 <style>
 :root { color-scheme: dark; font: 17px/1.6 system-ui,sans-serif; background:#11151c; color:#e8edf4; }
 body { max-width:800px; margin:4rem auto; padding:0 1.4rem; }
@@ -15,25 +15,25 @@ code { overflow-wrap:anywhere; } .muted { color:#aebcca; }
 </head>
 <body>
 <p class="muted">prokjs · Unity editor tool · MIT</p>
-<h1>Texture Optimizer</h1>
+<h1>prokjs's VRChat World Optimizer</h1>
 <nav aria-label="Installation guide languages"><a href="https://github.com/prokjs/texture-optimizer/blob/main/README.md">English guide</a> · <a href="https://github.com/prokjs/texture-optimizer/blob/main/README.ko.md" lang="ko">한국어 설치 안내</a> · <a href="https://github.com/prokjs/texture-optimizer/blob/main/README.ja.md" lang="ja">日本語インストールガイド</a></nav>
-<p>Inspect texture memory and apply reversible resolution-cap reductions. Unity UI (com.unity.ugui) required. Editor-only: no runtime or network hooks.</p>
+<p>Inspect texture memory, apply reversible texture reductions, analyze and generate conservative mesh LODs, and prepare static occlusion and floor-shadow lighting. Bake controls require separate confirmation. Unity UI (com.unity.ugui) required. Editor-only: no runtime or network hooks.</p>
 <p><strong>Made for VRChat projects using Unity 2022.3.22f1. Other Unity versions have not been tested and may be incompatible.</strong></p>
 <h2>Install with VRChat Creator Companion</h2>
 <p><a class="button" href="vcc://vpm/addRepo?url=https%3A%2F%2Fprokjs.github.io%2Ftexture-optimizer%2Findex.json">Add repository to VCC</a></p>
-<p>Then manage your project in VCC and add <strong>prokjs Texture Optimizer</strong>.</p>
+<p>Then manage your project in VCC and add <strong>prokjs's VRChat World Optimizer</strong>.</p>
 <p>Or add this repository URL manually in VCC Settings → Packages → Add Repository:</p>
 <p><code>https://prokjs.github.io/texture-optimizer/index.json</code></p>
 <h2>Other installation options</h2>
 <ul>
-<li><a href="https://github.com/prokjs/texture-optimizer/releases/download/v1.0.0/prokjs-texture-optimizer-1.0.0.unitypackage">Download v1.0.0 .unitypackage</a>. Ensure Unity UI is installed, then import into your project.</li>
-<li>Unity Package Manager → Add package from git URL: <code>https://github.com/prokjs/texture-optimizer.git#v1.0.0</code>.</li>
-<li><a href="https://github.com/prokjs/texture-optimizer/releases/download/v1.0.0/com.prokjs.texture-optimizer-1.0.0.zip">Download the VPM package ZIP</a> (package contents at archive root).</li>
+<li><a href="https://github.com/prokjs/texture-optimizer/releases/download/v1.1.0/prokjs-texture-optimizer-1.1.0.unitypackage">Download v1.1.0 .unitypackage</a>. Ensure Unity UI is installed, then import into your project.</li>
+<li>Unity Package Manager → Add package from git URL: <code>https://github.com/prokjs/texture-optimizer.git#v1.1.0</code>.</li>
+<li><a href="https://github.com/prokjs/texture-optimizer/releases/download/v1.1.0/com.prokjs.texture-optimizer-1.1.0.zip">Download the VPM package ZIP</a> (package contents at archive root).</li>
 </ul>
-<p>Use only one installation method per project. Back up your project before changing texture settings.</p>
-<p>Open <strong>Tools → prokjs → Texture Optimizer</strong> in Unity.</p>
+<p>Use only one installation method per project. Back up your project before changing assets or scene settings. Static estimates are not measured profiling or FPS predictions.</p>
+<p>Open <strong>Tools → prokjs → VRChat World Optimizer</strong> in Unity.</p>
 <h2>Documentation and attribution</h2>
-<p><a href="https://github.com/prokjs/texture-optimizer#readme">User guide and source</a> · <a href="https://github.com/prokjs/texture-optimizer/releases/tag/v1.0.0">Release v1.0.0</a> · <a href="https://github.com/prokjs/texture-optimizer/blob/main/LICENSE">MIT license</a></p>
-<p class="muted">Independently implemented by prokjs, inspired by <a href="https://github.com/Thryrallo/VRC-Avatar-Performance-Tools">Thry's VRAM Checker in Avatar Performance Tools</a>. Not copied or reverse engineered, and not affiliated with or endorsed by Thry or VRChat.</p>
+<p><a href="https://github.com/prokjs/texture-optimizer#readme">User guide and source</a> · <a href="https://github.com/prokjs/texture-optimizer/releases/tag/v1.1.0">Release v1.1.0</a> · <a href="https://github.com/prokjs/texture-optimizer/blob/main/LICENSE">MIT license</a></p>
+<p class="muted">Independently implemented by prokjs. Texture inventory inspired by <a href="https://github.com/Thryrallo/VRC-Avatar-Performance-Tools">Thry's VRAM Checker in Avatar Performance Tools</a>. Not copied or reverse engineered, and not affiliated with or endorsed by Thry or VRChat.</p>
 </body>
 </html>

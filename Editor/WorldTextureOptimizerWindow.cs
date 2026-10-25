@@ -16,6 +16,9 @@ public sealed class WorldTextureOptimizerWindow : EditorWindow
     [SerializeField] private DefaultAsset folder;
     [SerializeField] private int batchSize = 1024;
     [SerializeField] private TreeViewState treeState;
+    [SerializeField] private int activeTab;
+    private WorldLodOptimizerWindow lodController;
+    private static readonly string[] TabLabels = { "Textures", "LOD & Analysis", "Occlusion & Shadows" };
     private TextureTable table;
     private Backend.ScanResult inventory;
     private SearchField search;
@@ -27,48 +30,84 @@ public sealed class WorldTextureOptimizerWindow : EditorWindow
     private const string RepositoryUrl = "https://github.com/prokjs/texture-optimizer";
     private static readonly string[] SizeLabels = Array.ConvertAll(Backend.Sizes, value => value.ToString());
 
-    [MenuItem("Tools/prokjs/Texture Optimizer")]
+    [MenuItem("Tools/prokjs/VRChat World Optimizer")]
     public static void Open()
     {
-        var window = GetWindow<WorldTextureOptimizerWindow>("Texture Optimizer");
-        window.minSize = new Vector2(1100, 600);
+        var window = GetWindow<WorldTextureOptimizerWindow>("World Optimizer");
+        window.minSize = new Vector2(1100, 700);
         window.Show();
+    }
+    public static void OpenLODTab()
+    {
+        Open();
+        var window = GetWindow<WorldTextureOptimizerWindow>();
+        window.activeTab = 1;
+        window.Repaint();
     }
     private void OnEnable()
     {
+        titleContent = new GUIContent("World Optimizer");
+        minSize = new Vector2(1100, 700);
         if (treeState == null) treeState = new TreeViewState();
         search = new SearchField();
         table = new TextureTable(treeState, this);
+    }
+    private void OnDisable()
+    {
+        if (lodController != null)
+        {
+            DestroyImmediate(lodController);
+            lodController = null;
+        }
+    }
+    private void OnSelectionChange()
+    {
+        if (lodController != null) lodController.NotifySelectionChanged();
+        Repaint();
     }
     private void OnGUI()
     {
         using (new EditorGUILayout.HorizontalScope())
         {
-            EditorGUILayout.LabelField("prokjs Texture Optimizer", EditorStyles.boldLabel);
-            GUILayout.Label("v1.0.0  |  Editor only", EditorStyles.miniLabel, GUILayout.Width(140));
-            if (GUILayout.Button("User guide", GUILayout.Width(85))) Application.OpenURL(RepositoryUrl + "/blob/v1.0.0/Documentation~/user-guide.md");
+            EditorGUILayout.LabelField("prokjs's VRChat World Optimizer", EditorStyles.boldLabel);
+            GUILayout.Label("v1.1.0  |  Editor only", EditorStyles.miniLabel, GUILayout.Width(140));
+            if (GUILayout.Button("User guide", GUILayout.Width(85))) Application.OpenURL(RepositoryUrl + "/blob/v1.1.0/Documentation~/user-guide.md");
             if (GUILayout.Button("Report issue", GUILayout.Width(90))) Application.OpenURL(RepositoryUrl + "/issues");
         }
         EditorGUILayout.HelpBox("Made for VRChat projects using Unity 2022.3.22f1. Other Unity versions have not been tested and may be incompatible.", MessageType.Warning);
         showGettingStarted = EditorGUILayout.Foldout(showGettingStarted, "Getting started", true);
         if (showGettingStarted)
-            EditorGUILayout.HelpBox("1. Commit or back up your project. Choose a scope and platform, then Scan.\n2. Check textures, choose a smaller cap and click Propose for checked.\n3. Review the estimated savings and Preview Apply checked. Only the final confirmation changes assets.\n4. Inspect your world at close range. Restore Last Batch if needed. Unity Undo is not a substitute for backups.", MessageType.Info);
+            EditorGUILayout.HelpBox("Back up or commit your project first. Textures: Scan, propose lower caps, then review Preview Apply checked. LOD & Analysis: Analyze, inspect safe candidates, generate a read-only mesh preview, then explicitly Apply. Occlusion & Shadows: inspect selected geometry before changing scene flags. Bakes are separate, deliberate scene-wide operations. Opening this tool never scans, saves or starts a bake.", MessageType.Info);
         showAbout = EditorGUILayout.Foldout(showAbout, "About, attribution & safety", true);
         if (showAbout)
         {
-            EditorGUILayout.HelpBox("Developed by prokjs. Independently implemented, inspired by Thry's VRAM Checker in Avatar Performance Tools. Not a reverse-engineered copy; not affiliated with or endorsed by Thry. MIT licensed, provided as-is without warranty.\nOnly resolution caps change. This tool does not choose an acceptable visual quality for you. Keep project backups; local recovery journals are not source-image backups.", MessageType.Info);
+            EditorGUILayout.HelpBox("Developed by prokjs. Texture inventory independently implemented, inspired by Thry's VRAM Checker in Avatar Performance Tools. Not a reverse-engineered copy; not affiliated with or endorsed by Thry or VRChat. MIT licensed, provided as-is without warranty. Static estimates are not measured profiling or FPS predictions. Keep project backups; local recovery journals are not a substitute.", MessageType.Info);
             using (new EditorGUILayout.HorizontalScope())
             {
                 if (GUILayout.Button("GitHub / license")) Application.OpenURL(RepositoryUrl);
                 if (GUILayout.Button("Thry's original VRAM Checker")) Application.OpenURL("https://github.com/Thryrallo/VRC-Avatar-Performance-Tools");
-                if (GUILayout.Button("Open backup folder"))
+                if (GUILayout.Button("Open texture backup folder"))
                 {
                     System.IO.Directory.CreateDirectory(Backend.BackupDirectory);
                     EditorUtility.RevealInFinder(System.IO.Path.GetFullPath(Backend.BackupDirectory));
                 }
             }
         }
-        EditorGUILayout.HelpBox("Shared-asset edit: a cap affects every scene, prefab and material using that texture. Source pixels are never overwritten. No FPS claim. Scan and proposal controls are read-only; only confirmed Apply/Restore writes import settings.", MessageType.Warning);
+        activeTab = GUILayout.Toolbar(Mathf.Clamp(activeTab, 0, TabLabels.Length - 1), TabLabels, GUILayout.Height(26));
+        EditorGUILayout.Space(4);
+        if (activeTab != 0)
+        {
+            if (lodController == null)
+            {
+                lodController = CreateInstance<WorldLodOptimizerWindow>();
+                lodController.hideFlags = HideFlags.HideAndDontSave;
+                lodController.SetHost(this);
+            }
+            lodController.DrawEmbedded(activeTab == 2);
+            return;
+        }
+        EditorGUILayout.LabelField("Texture Resolution", EditorStyles.boldLabel);
+        EditorGUILayout.HelpBox("Shared-asset edit: a cap affects every scene, prefab and material using that texture. Imported sources are untouched. Native RGBA32/DXT1/DXT5 .asset pixels are resampled in place under Default only, preserving their format with an exact original-byte backup. Only confirmed Apply/Restore writes assets or import settings. No FPS claim.", MessageType.Warning);
         EditorGUI.BeginChangeCheck();
         using (new EditorGUILayout.HorizontalScope())
         {
@@ -81,7 +120,7 @@ public sealed class WorldTextureOptimizerWindow : EditorWindow
         using (new EditorGUILayout.HorizontalScope())
         {
             if (GUILayout.Button("Scan / Refresh", GUILayout.Width(130))) Scan();
-            GUILayout.Label("Loaded scenes: renderer/skybox materials, terrain layers, UI and light cookies. Project/folder: imported texture assets.", EditorStyles.miniLabel);
+            GUILayout.Label("Loaded scenes: renderer/skybox materials, terrain layers, UI and light cookies. Project/folder: imported and native texture assets.", EditorStyles.miniLabel);
         }
         EditorGUILayout.LabelField(inventory == null ? "No scan snapshot." : inventory.scopeDescription, EditorStyles.miniLabel);
         if (stale) EditorGUILayout.HelpBox("Scope/target changed or a batch completed. Scan again before previewing another batch. Table remains the last explicit snapshot.", MessageType.Info);
@@ -188,7 +227,7 @@ public sealed class WorldTextureOptimizerWindow : EditorWindow
             {
                 var row = rows[i];
                 var options = new List<int>();
-                foreach (int size in Backend.Sizes) if (size <= row.effectiveCap && size <= Backend.LargestAllowedCap(row.sourceWidth, row.sourceHeight)) options.Add(size);
+                foreach (int size in Backend.Sizes) if (size <= row.effectiveCap && (!row.nativeAsset || size <= Backend.LargestAllowedCap(row.sourceWidth, row.sourceHeight))) options.Add(size);
                 allowedSizes[i] = options.ToArray();
                 allowedLabels[i] = options.ConvertAll(size => size.ToString()).ToArray();
                 estimates[i] = Backend.ProposedBytes(row, row.proposedMaxSize);
@@ -352,7 +391,7 @@ public sealed class WorldTextureOptimizerPreview : EditorWindow
     {
         if (batch == null) { EditorGUILayout.HelpBox("Preview lost after domain reload. Close and rebuild the preview; no implicit apply occurs.", MessageType.Info); return; }
         EditorGUILayout.LabelField((restore ? "Restore" : "Apply") + " — " + batch.target + " — " + batch.entries.Count + " named textures", EditorStyles.boldLabel);
-        EditorGUILayout.HelpBox(restore ? "Restore only unchanged owned importer states. Any source/importer edits since Apply are conflicts and are NEVER overwritten. Partial/canceled entries remain in the durable backup." : "This changes SHARED texture assets across all scenes/prefabs. Only checked changed resolution caps are written. Non-default targets may enable their override; Default does not override explicit platform settings. Source files are not resampled. This is not a performance guarantee.", MessageType.Warning);
+        EditorGUILayout.HelpBox(restore ? "Restore only unchanged owned asset/importer states. Source, native pixel, metadata or importer edits since Apply are conflicts and are NEVER overwritten. Native restore recovers the exact original .asset bytes. Partial/canceled entries remain in the durable backup." : "This changes SHARED texture assets across all scenes/prefabs. Native RGBA32/DXT1/DXT5 .asset pixels are resampled under Default only, preserving their format after an exact original-byte backup. Imported source files are untouched; non-default importer targets may enable overrides, and Default does not override explicit platform settings. This is not a performance guarantee.", MessageType.Warning);
         EditorGUILayout.SelectableLabel("Backup: " + batch.backupPath, GUILayout.Height(20));
         using (var area = new EditorGUILayout.ScrollViewScope(scroll))
         {
@@ -362,7 +401,9 @@ public sealed class WorldTextureOptimizerPreview : EditorWindow
                 using (new EditorGUILayout.VerticalScope(EditorStyles.helpBox))
                 {
                     EditorGUILayout.SelectableLabel(entry.assetPath, GUILayout.Height(18));
-                    EditorGUILayout.LabelField(restore ? (entry.state + " | " + batch.target + " cap " + entry.targetCap + " → previous cap " + entry.beforeCap + (batch.target == Backend.Target.Default ? "" : " (restore original override state)")) : (batch.target + ": cap " + entry.targetCap + " | previous stored cap " + entry.beforeCap));
+                    EditorGUILayout.LabelField(entry.nativeAsset
+                        ? (restore ? entry.state + " | Native: restore exact original .asset bytes" : "Native Default: resample longest edge " + entry.beforeCap + " → " + entry.targetCap + "; original bytes backed up")
+                        : (restore ? (entry.state + " | " + batch.target + " cap " + entry.targetCap + " → previous cap " + entry.beforeCap + (batch.target == Backend.Target.Default ? "" : " (restore original override state)")) : (batch.target + ": cap " + entry.targetCap + " | previous stored cap " + entry.beforeCap)));
                     if (!string.IsNullOrEmpty(entry.message)) EditorGUILayout.LabelField(entry.message, EditorStyles.wordWrappedMiniLabel);
                 }
             }

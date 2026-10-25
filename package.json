@@ -1,9 +1,9 @@
 {
   "name": "com.prokjs.texture-optimizer",
-  "version": "1.0.0",
-  "displayName": "prokjs Texture Optimizer",
-  "url": "https://github.com/prokjs/texture-optimizer/releases/download/v1.0.0/com.prokjs.texture-optimizer-1.0.0.zip",
-  "description": "Standalone editor tools for inspecting texture memory and applying reversible texture import optimizations.",
+  "version": "1.1.0",
+  "displayName": "prokjs's VRChat World Optimizer",
+  "url": "https://github.com/prokjs/texture-optimizer/releases/download/v1.1.0/com.prokjs.texture-optimizer-1.1.0.zip",
+  "description": "Editor-only VRChat world optimization: reversible texture optimization, conservative mesh LOD analysis and generation, static occlusion setup, and floor-shadow lighting preparation with explicit bake controls.",
   "unity": "2022.3",
   "license": "MIT",
   "author": {
@@ -14,7 +14,7 @@
   "dependencies": {
     "com.unity.ugui": "1.0.0"
   },
-  "keywords": ["editor", "texture", "optimization", "vram"],
+  "keywords": ["editor", "vrchat", "world", "texture", "optimization", "vram", "lod", "mesh", "occlusion", "lighting", "shadows"],
   "documentationUrl": "https://github.com/prokjs/texture-optimizer#readme",
   "changelogUrl": "https://github.com/prokjs/texture-optimizer/blob/main/CHANGELOG.md",
   "licensesUrl": "https://github.com/prokjs/texture-optimizer/blob/main/LICENSE"

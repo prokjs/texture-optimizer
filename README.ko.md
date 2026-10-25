@@ -1,4 +1,4 @@
-# Texture Optimizer
+# prokjs's VRChat World Optimizer — v1.1.0
 
 [EN](README.md) · [한국어](README.ko.md) · [日本語](README.ja.md)
 
@@ -6,7 +6,7 @@
 
 **텍스처 해상도 상한을 변경하기 전에 내용을 확인하세요.** prokjs가 독립적으로 개발한 Unity Editor 전용 도구로, 임포트된 텍스처를 찾고 GPU 할당량 추정치를 비교한 뒤 복원 가능한 임포터 해상도 상한 축소를 사용자가 검토하여 적용할 수 있습니다.
 
-**Tools → prokjs → Texture Optimizer**에서 엽니다. 창을 여는 것만으로는 스캔하거나 변경하지 않습니다. 런타임 컴포넌트나 네트워크 연결 기능은 없습니다. 아래 안내의 UI 이름은 실제 영어 Editor UI와 동일하게 표기했습니다.
+**Tools → prokjs → VRChat World Optimizer**에서 엽니다. **Textures**, **LOD & Analysis**, **Occlusion & Shadows** 탭을 사용하는 통합 Editor 창입니다. 창을 열거나 스캔하는 것만으로 변경이나 베이크가 자동 실행되지 않습니다.
 
 - 로드된 씬, 선택한 오브젝트, Assets 아래 폴더 또는 Assets 아래 프로젝트 전체의 텍스처 에셋을 스캔합니다.
 - 원본 크기, 현재 로드된 크기와 포맷, Default / Standalone / Android 상한 및 안전 제한을 한 표에서 확인합니다.
@@ -21,11 +21,9 @@
 
 VRChat 프로젝트를 대상으로 하지만 VRChat SDK에 의존하지 않습니다. 설치하거나 사용하는 데 VRChat SDK, Udon 또는 별도의 아바타/월드 도구가 필요하지 않습니다.
 
-### 릴리스 검증
+### 버전 및 업그레이드
 
-별도의 깨끗한 Unity 2022.3.22f1 프로젝트에서 17개 스모크 검사를 통과했습니다. 패키지 어셈블리 컴파일, 공개 네임스페이스, Default 상한 적용/재임포트 및 정확한 복원, Android 오버라이드 적용 및 정확한 복원, 오래된 상태 및 상향 조정 방지, 이후 편집 내용을 덮어쓰는 복원 방지, 스프라이트 잠금, 원본 해시 유지가 포함됩니다. 실제 Editor 창의 외관도 확인했습니다. 이 검사는 개발 중인 월드 프로젝트를 수정하지 않았습니다.
-
-이는 **VCC 애플리케이션의 전체 설치 흐름 테스트나 Android 기기의 메모리/성능 테스트가 아닙니다.** 로컬 UPM 설치 검증이 모든 설치 방법이나 Unity 버전의 검증을 의미하지는 않습니다.
+**1.1.0**은 기존 도구의 확장입니다. 저장소 `prokjs/texture-optimizer`, 패키지 `com.prokjs.texture-optimizer`, 네임스페이스 `Prokjs.TextureOptimizer` 및 기존 텍스처 백업 경로를 유지합니다. 과거 1.0.0 텍스처 검증은 새 LOD/조명 기능의 검증을 의미하지 않습니다.
 
 ## 설치 — 한 가지 방법만 선택
 
@@ -33,20 +31,20 @@ VRChat 프로젝트를 대상으로 하지만 VRChat SDK에 의존하지 않습�
 
 ### 방법 1: GitHub 릴리스 `.unitypackage`
 
-1. [v1.0.0 릴리스](https://github.com/prokjs/texture-optimizer/releases/tag/v1.0.0)를 엽니다.
-2. 릴리스의 **Assets**에서 **`prokjs-texture-optimizer-1.0.0.unitypackage`**를 다운로드합니다. GitHub의 “Source code” ZIP/TAR 다운로드는 Unity 임포트 패키지가 아닙니다.
+1. [v1.1.0 릴리스](https://github.com/prokjs/texture-optimizer/releases/tag/v1.1.0)를 엽니다.
+2. **Assets**에서 **`prokjs-texture-optimizer-1.1.0.unitypackage`**를 다운로드합니다. “Source code” ZIP/TAR는 Unity 임포트 패키지가 아닙니다.
 3. Unity에서 **Assets → Import Package → Custom Package…**를 선택하고 다운로드한 `.unitypackage`를 열어 내용을 임포트합니다.
-4. Unity의 컴파일이 끝나면 **Tools → prokjs → Texture Optimizer**를 엽니다.
+4. 컴파일 후 **Tools → prokjs → VRChat World Optimizer**를 엽니다.
 
 ### 방법 2: Unity Package Manager (Git)
 
 Unity에서 **Window → Package Manager → + → Add package from git URL…**을 열고 다음을 입력합니다.
 
 ```text
-https://github.com/prokjs/texture-optimizer.git#v1.0.0
+https://github.com/prokjs/texture-optimizer.git#v1.1.0
 ```
 
-`com.prokjs.texture-optimizer`를 v1.0.0으로 고정하여 설치합니다. Unity의 Git 패키지 설치 기능을 사용하려면 정상적으로 작동하는 Git이 설치되어 있어야 합니다.
+`com.prokjs.texture-optimizer`를 v1.1.0으로 고정하여 설치합니다. Unity Git 설치에는 Git이 필요합니다.
 
 ### 방법 3: VRChat Creator Companion (VCC)
 
@@ -57,8 +55,8 @@ https://github.com/prokjs/texture-optimizer.git#v1.0.0
    https://prokjs.github.io/texture-optimizer/index.json
    ```
 
-3. 저장소를 활성화합니다. 프로젝트의 **Manage Project**를 열고 **Texture Optimizer**를 찾아 **1.0.0**을 추가합니다.
-4. Unity를 열고 **Tools → prokjs → Texture Optimizer**를 사용합니다.
+3. 저장소를 활성화하고 **Manage Project**에서 **prokjs's VRChat World Optimizer** (`com.prokjs.texture-optimizer`) **1.1.0**을 추가합니다.
+4. **Tools → prokjs → VRChat World Optimizer**를 엽니다.
 
 VCC는 선택 가능한 설치 방법이며 런타임 의존성이 아닙니다.
 
@@ -74,17 +72,27 @@ VCC는 선택 가능한 설치 방법이며 런타임 의존성이 아닙니다.
 
 스캔 범위, 추정치 해석, 백업 관리 및 문제 해결은 [전체 사용 설명서](Documentation~/user-guide.ko.md)를 참고하세요.
 
+## LOD 및 씬 준비
+
+**LOD & Analysis**의 스캔 권장 사항은 정적 분석이며 실제 프로파일러 측정이나 FPS 예측이 아닙니다. 기존 LOD 레벨은 Inspector에서 확인합니다. 자동 LOD는 적합한 고정 불투명 메시를 선택하고 명시적 미리보기를 검토한 후 적용합니다. LOD0을 보존하고 축소 메시를 새 에셋 캐시에 저장합니다. 감소율은 **제거할 정점의 비율**이며 삼각형 비율이나 정확한 결과를 보장하지 않습니다. 토폴로지 보존 때문에 목표에 도달하지 못할 수 있으므로 각 레벨과 전환을 직접 확인하세요.
+
+원본 메시/UV/머티리얼/콜라이더를 다시 쓰지 않습니다. 픽업, Udon 제어 대상, 스킨드 메시, 머티리얼 오버라이드 및 베이크된 라이트맵 대체는 권장 자동화에서 제외합니다. 보수적 적격 판정도 시각적 적합성을 보장하지 않습니다.
+
+**Occlusion & Shadows**는 미리보기 후 적합한 대상의 정적 플래그를 준비합니다. 플래그만으로 런타임 컬링이 실행되지 않으며 별도의 Unity 오클루전 베이크가 필요합니다. 바닥 준비는 이미 적합한 UV2/GI가 있어야 하며 UV2 생성이나 조명 변환을 하지 않습니다. 조명 베이크는 별도 확인이 필요한 **씬 전체** 작업이며 오래 걸릴 수 있습니다. 필요하면 취소하세요. 플래그 복원은 베이크된 조명 데이터를 복원하지 않습니다. 기존 런타임 타프 컨트롤러도 변경하지 않습니다.
+
+씬 변경은 Undo 또는 해당 배치 복원을 사용합니다. 복원 후에도 생성된 LOD `.asset`은 Undo/저장된 참조 보호를 위해 보존합니다. 복원은 에셋 삭제가 아닙니다. 적용/베이크 전에 씬과 조명 데이터를 저장하고 백업하세요.
+
 ## 중요한 제한 사항과 안전 안내
 
 > **공유 에셋을 변경합니다.** 상한을 변경하면 스캔한 오브젝트뿐 아니라 해당 텍스처를 사용하는 모든 씬, 머티리얼, 프리팹 및 기타 사용처에 영향을 줍니다.
 
-- **원본 이미지 픽셀은 변경하지 않습니다.** 지원되는 텍스처 임포트 해상도 상한을 변경하고, Standalone/Android에서 필요한 경우 선택한 플랫폼의 오버라이드 상태를 변경합니다. Unity는 영향을 받는 텍스처를 재임포트합니다. 원본 이미지 리사이저나 압축 포맷 최적화 도구가 아닙니다.
+- **임포트 원본 이미지 픽셀은 유지합니다.** 임포터 상한/선택 플랫폼 오버라이드 변경 후 재임포트합니다. 단, 지원하는 독립형 RGBA32/DXT1/DXT5 **네이티브 Texture2D `.asset`은 Default에서 픽셀 자체를 리샘플링**하며 모든 플랫폼에 공유됩니다. 쓰기 전 원본 바이트를 저장하고 GUID/로컬 ID, 포맷, 밉맵 유무, 샘플러 설정을 유지하되 밉맵을 다시 생성합니다. 사용 전에 [가이드의 적격/복원 조건](Documentation~/user-guide.ko.md)을 확인하세요.
 - **FPS 향상을 보장하지 않습니다.** 해상도를 낮추면 디테일을 줄이는 대신 임포트된 텍스처의 할당량을 줄일 수 있지만, 프레임 속도 향상이나 모든 성능 병목 해결을 보장하지는 않습니다.
 - **추정치는 실제 메모리 상주량 측정값이 아닙니다.** 현재 할당량 추정은 Editor에 로드된 텍스처 크기와 그래픽스 포맷을 사용합니다. 선택 대상/제안 값도 같은 포맷을 대용값으로 사용합니다. 스트리밍, 플랫폼 포맷, 기기 폴백, 아틀라스 패킹 및 임포터의 크기 반올림에 따라 달라질 수 있습니다. **Android 추정치는 대용값이며 Android 기기 측정값이 아닙니다.**
 - **일부 에셋은 의도적으로 잠깁니다.** 스프라이트/아틀라스 입력, 생성된 조명/반사 에셋, 패키지·내장·임시·내장 하위 에셋, 지원하지 않는 비 2D 텍스처 및 안전하게 임포터를 편집할 수 없는 에셋이 해당됩니다. 잠긴 행은 정보 제공용이며 해당 에셋의 관리 절차를 우회하라는 뜻이 아닙니다.
 - **씬/선택 스캔은 완전한 의존성 감사가 아닙니다.** 지원되는 컴포넌트/머티리얼 참조를 검사합니다. 특히 아바타 애니메이션 클립에서만 참조하는 텍스처나 머티리얼의 탐지는 **지원하거나 보장하지 않습니다.** 폴더/프로젝트 범위는 텍스처 에셋 목록을 보여줄 뿐 실제 사용 여부를 증명하지 않습니다.
-- **Unity Undo에 의존하지 마세요.** Unity Undo로 복구할 수 있다는 보장이 없습니다. 도구의 백업과 별도의 소스 관리 또는 프로젝트 백업을 사용하세요.
-- **백업은 프로젝트별 로컬 데이터입니다.** 위치는 `UserSettings/ProkjsTextureOptimizerBackups/`입니다. 원본 이미지 백업이 아니며 버전 관리 대상에 포함되지 않을 수 있습니다. 복원이 필요하면 보관하세요. 창에서는 마지막 배치만 제공하며 여러 배치의 이력을 탐색할 수 없습니다.
+- **텍스처 임포터 변경은 Unity Undo로 복원된다고 보장하지 않습니다.** 텍스처 배치 백업과 소스 관리를 사용하세요. LOD/정적 플래그에는 별도의 Undo/배치 복원이 있습니다.
+- **텍스처 백업은 프로젝트별 로컬 데이터** `UserSettings/ProkjsTextureOptimizerBackups/`입니다. 임포트 이미지는 임포터 복원 정보만, 지원하는 네이티브 에셋은 원본 `.asset` 바이트도 저장하므로 모두 보존하세요. 네이티브 복원은 경로/GUID/메타데이터/적용 후 내용 해시가 일치해야 하며 이동/대체/이후 편집은 거부합니다. 텍스처 탭은 마지막 배치만 제공합니다.
 - **도구를 제거해도 상한은 복원되지 않습니다.** 제거 전에 원하는 임포터 변경을 복원하거나 되돌리세요. 패키지 파일을 제거해도 로컬 백업 기록은 자동으로 삭제되지 않습니다.
 
 ## 출처 및 라이선스

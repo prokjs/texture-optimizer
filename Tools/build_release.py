@@ -2,7 +2,7 @@
 """Build the allowlisted Unity/VPM release with Python 3.10+ (standard library only).
 
 Run from any directory:
-  python Tools/build_release.py --repo-url https://github.com/prokjs/texture-optimizer --version 1.0.0
+  python Tools/build_release.py --repo-url https://github.com/prokjs/texture-optimizer --version 1.1.0
 
 The script never executes Unity, modifies source assets, or publishes anything.
 VPM schema references: https://vcc.docs.vrchat.com/vpm/repos/ and
@@ -33,6 +33,11 @@ REQUIRED_FILES = (
     "Editor/Prokjs.TextureOptimizer.Editor.asmdef",
     "Editor/WorldTextureOptimizerBackend.cs",
     "Editor/WorldTextureOptimizerWindow.cs",
+    "Editor/WorldLodOptimizerBackend.cs",
+    "Editor/WorldLodOptimizerWindow.cs",
+    "Editor/WorldLodMeshReducer.cs",
+    "Editor/WorldOcclusionOptimizerBackend.cs",
+    "Editor/WorldOptimizerPolicy.cs",
     "README.md",
     "README.ko.md",
     "README.ja.md",
@@ -179,8 +184,8 @@ def landing_page(repo_url, version, listing_url, zip_url, unity_url):
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="description" content="Standalone Unity editor texture inspection and reversible import optimization by prokjs.">
-<title>prokjs Texture Optimizer</title>
+<meta name="description" content="Editor-only VRChat world texture optimization, LOD analysis and generation, occlusion setup and floor-shadow lighting controls by prokjs.">
+<title>prokjs's VRChat World Optimizer</title>
 <style>
 :root {{ color-scheme: dark; font: 17px/1.6 system-ui,sans-serif; background:#11151c; color:#e8edf4; }}
 body {{ max-width:800px; margin:4rem auto; padding:0 1.4rem; }}
@@ -191,13 +196,13 @@ code {{ overflow-wrap:anywhere; }} .muted {{ color:#aebcca; }}
 </head>
 <body>
 <p class="muted">prokjs · Unity editor tool · MIT</p>
-<h1>Texture Optimizer</h1>
+<h1>prokjs's VRChat World Optimizer</h1>
 <nav aria-label="Installation guide languages"><a href="{esc(repo_url)}/blob/main/README.md">English guide</a> · <a href="{esc(repo_url)}/blob/main/README.ko.md" lang="ko">한국어 설치 안내</a> · <a href="{esc(repo_url)}/blob/main/README.ja.md" lang="ja">日本語インストールガイド</a></nav>
-<p>Inspect texture memory and apply reversible resolution-cap reductions. Unity UI (com.unity.ugui) required. Editor-only: no runtime or network hooks.</p>
+<p>Inspect texture memory, apply reversible texture reductions, analyze and generate conservative mesh LODs, and prepare static occlusion and floor-shadow lighting. Bake controls require separate confirmation. Unity UI (com.unity.ugui) required. Editor-only: no runtime or network hooks.</p>
 <p><strong>Made for VRChat projects using Unity 2022.3.22f1. Other Unity versions have not been tested and may be incompatible.</strong></p>
 <h2>Install with VRChat Creator Companion</h2>
 <p><a class="button" href="{esc(add_url)}">Add repository to VCC</a></p>
-<p>Then manage your project in VCC and add <strong>prokjs Texture Optimizer</strong>.</p>
+<p>Then manage your project in VCC and add <strong>prokjs's VRChat World Optimizer</strong>.</p>
 <p>Or add this repository URL manually in VCC Settings → Packages → Add Repository:</p>
 <p><code>{esc(listing_url)}</code></p>
 <h2>Other installation options</h2>
@@ -206,11 +211,11 @@ code {{ overflow-wrap:anywhere; }} .muted {{ color:#aebcca; }}
 <li>Unity Package Manager → Add package from git URL: <code>{esc(repo_url)}.git#v{esc(version)}</code>.</li>
 <li><a href="{esc(zip_url)}">Download the VPM package ZIP</a> (package contents at archive root).</li>
 </ul>
-<p>Use only one installation method per project. Back up your project before changing texture settings.</p>
-<p>Open <strong>Tools → prokjs → Texture Optimizer</strong> in Unity.</p>
+<p>Use only one installation method per project. Back up your project before changing assets or scene settings. Static estimates are not measured profiling or FPS predictions.</p>
+<p>Open <strong>Tools → prokjs → VRChat World Optimizer</strong> in Unity.</p>
 <h2>Documentation and attribution</h2>
 <p><a href="{esc(repo_url)}#readme">User guide and source</a> · <a href="{esc(repo_url)}/releases/tag/v{esc(version)}">Release v{esc(version)}</a> · <a href="{esc(repo_url)}/blob/main/LICENSE">MIT license</a></p>
-<p class="muted">Independently implemented by prokjs, inspired by <a href="https://github.com/Thryrallo/VRC-Avatar-Performance-Tools">Thry's VRAM Checker in Avatar Performance Tools</a>. Not copied or reverse engineered, and not affiliated with or endorsed by Thry or VRChat.</p>
+<p class="muted">Independently implemented by prokjs. Texture inventory inspired by <a href="https://github.com/Thryrallo/VRC-Avatar-Performance-Tools">Thry's VRAM Checker in Avatar Performance Tools</a>. Not copied or reverse engineered, and not affiliated with or endorsed by Thry or VRChat.</p>
 </body>
 </html>
 """
@@ -268,7 +273,7 @@ def build(args):
             raise ValueError("Existing website listing has an unexpected repository id")
     else:
         listing = {"packages": {}}
-    listing.update({"name": "prokjs Texture Optimizer", "id": "com.prokjs.texture-optimizer.repository",
+    listing.update({"name": "prokjs's VRChat World Optimizer", "id": "com.prokjs.texture-optimizer.repository",
                     "url": listing_url, "author": "prokjs"})
     package_listing = listing.setdefault("packages", {}).setdefault(PACKAGE_NAME, {"versions": {}})
     versions = package_listing.setdefault("versions", {})
@@ -295,7 +300,7 @@ def build(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--repo-url", required=True, help="Public HTTPS GitHub repository URL")
-    parser.add_argument("--version", required=True, help="Must match package.json, e.g. 1.0.0")
+    parser.add_argument("--version", required=True, help="Must match package.json, e.g. 1.1.0")
     parser.add_argument("--listing-url", help="Custom Pages listing URL (default: OWNER.github.io/REPOSITORY/index.json)")
     parser.add_argument("--previous-listing", help="Existing deployed index.json to merge, preserving prior release versions")
     parser.add_argument("--output", default="dist", help="Artifact directory, relative to the repository root")

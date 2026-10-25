@@ -1,4 +1,4 @@
-# Texture Optimizer user guide
+# prokjs's VRChat World Optimizer v1.1.0 user guide
 
 **Languages:** English · [한국어](user-guide.ko.md) · [日本語](user-guide.ja.md)
 
@@ -6,9 +6,36 @@
 
 VRChat projects are the intended audience. The package itself has no VRChat SDK dependency.
 
-Texture Optimizer is an Editor-only tool for reviewing imported texture sizes and deliberately reducing resolution caps. It does not add anything to your scene or player build. Opening its window does not scan assets, propose changes, or run an optimization automatically.
+An Editor-only unified window for textures, LOD analysis/generation, and occlusion/floor-shadow preparation. Opening the window does not scan, apply, or bake automatically. The package identity remains `com.prokjs.texture-optimizer`.
 
 For installation, requirements, and version-pinned package URLs, see the [README](../README.md#install--choose-one-method). Install only one copy using one installation method. Remove older standalone optimizer scripts before installing.
+
+## Unified workflow: LOD & Analysis
+
+1. Save and back up scenes/assets before working in Edit Mode. Open **LOD & Analysis** and scan. Recommendations are static estimates, not measured draw calls, GPU timing, residency, or proof of FPS improvement.
+2. Review candidates and exclusions individually. Recommended automatic generation is for fixed opaque MeshRenderers using supported built-in shaders. Pickups, Udon-controlled objects, skinned meshes, material/property overrides, existing unsafe hierarchies, and baked-lightmapped substitutions are excluded. Do not bypass a lock to force automation.
+3. For an existing LODGroup, inspect its levels and transitions using the Inspector preview; this is not regeneration of its meshes.
+4. For an eligible candidate, choose reduction percentages and review the explicit named preview before applying automatic LODs. Percentages mean **vertices removed**, not triangles remaining. Topology preservation can prevent meeting a target exactly.
+5. Apply only the reviewed proposal. LOD0 preserves the original mesh; reduced meshes are cached as new `.asset` files under `Assets/prokjs/WorldOptimizerGenerated`. The original mesh/UV data, material assets and collider are not rewritten. Generated levels still need visual checks for silhouettes, UV shading and transitions; no automatic quality guarantee is made.
+6. Use Undo or the relevant batch restore to revert scene changes. Generated meshes are intentionally **retained after restore**, protecting Undo and saved references. Restore is not an asset cleanup operation. Scene batch records use `UserSettings/ProkjsWorldOptimizerBatches`; save your own scene/version-control backups too.
+
+## Unified workflow: Occlusion & Shadows
+
+Scan, review suitable fixed opaque candidates, preview the named changes, and explicitly apply static-flag preparation. Setting occluder/occludee flags is **not a generic runtime culler** and does not immediately hide objects. Use Unity's separate occlusion bake and inspect the result. Existing tarp runtime controllers are not modified.
+
+Floor-shadow preparation requires suitable **existing UV2 and GI settings**. It does not unwrap UV2, convert realtime lights, or create a private per-floor lighting bake. Lighting bake is a separate, explicitly confirmed **scene-wide** Unity operation, potentially long-running. Review scene lighting settings and all affected content first; use the cancel control to request cancellation when needed. Neither scanning nor preparing flags starts a bake.
+
+Undo/batch restore restores recorded scene flags, **not baked lighting data**. Back up scenes and lighting assets before baking; a later bake can replace shared scene lighting output. Inspect baked results and use your own backups to recover lighting data.
+
+## Native Texture2D `.asset` exception
+
+In **Textures**, a standalone editable main Texture2D that is the sole object in a `.asset` file may be reduced in **Default only** when its format is RGBA32, DXT1 or DXT5. This is **pixel resampling in place**, shared by all platforms, not a TextureImporter cap. Imported PNG/JPG and other source images retain their original pixels and use the cap workflow below.
+
+Native reduction preserves GUID/local ID, format, color space, sampler/streaming settings and whether mipmaps exist; existing mip chains are regenerated. The original `.asset` bytes are saved before writing. Dirty, embedded, subasset, package, noneditable, missing-metadata, unsupported-format and generated lighting/reflection assets remain locked. The minimum offered cap is 32.
+
+Native restore requires matching GUID/path, metadata and applied-content hashes plus the saved byte backup. Moved, replaced, later-edited or uncertain interrupted saves are refused rather than overwritten. Preserve the backup and use source control for conflicts. Uninstalling restores neither native pixels nor importer caps.
+
+The remaining sections document the **Textures** workflow, with the native exception above taking precedence over importer-only descriptions.
 
 ## Before you start
 
@@ -19,11 +46,11 @@ For installation, requirements, and version-pinned package URLs, see the [README
 
 **Shared texture means shared consequences:** selecting one object does not create a private copy of its textures. Every other scene, prefab, and material using an edited texture sees the new imported cap too.
 
-Unity Undo is not a recovery guarantee for this workflow. Use the optimizer's local batch backup and your own source-control history or project backup.
+Texture changes do not have a Unity Undo recovery guarantee. Use texture batch backups and source control. LOD/static-flag scene changes have separate Undo and batch restore.
 
 ## 1. Choose what to scan
 
-Open **Tools → prokjs → Texture Optimizer** and choose a **Scope**:
+Open **Tools → prokjs → VRChat World Optimizer**, choose **Textures**, then choose a **Scope**:
 
 | Scope | What it inventories |
 | --- | --- |
@@ -78,7 +105,7 @@ Locked rows are intentionally excluded from importer-cap changes. Common reasons
 - Sprite/atlas input: changing its importer can affect packing, slicing, and UI layout.
 - Generated lighting, reflection, lightmap, or similar assets: use the workflow that generates them.
 - Package, built-in, or transient texture: not a normal editable asset under `Assets`.
-- Embedded/sub-asset or native/generated asset without a supported `TextureImporter`.
+- Embedded/sub-assets and unsupported native/generated assets. The supported standalone native Texture2D exception is described above.
 - Render texture, array, cubemap, or other unsupported non-2D importer shape.
 - Read-only asset/metadata, missing source dimensions, or dimensions below the offered minimum cap.
 - An inherited explicit format unsupported by the selected platform. Choose a supported format deliberately in Unity's Inspector instead of relying on this cap tool to fix it.
@@ -114,7 +141,7 @@ It rechecks asset/importer state before each change. Changes made since the scan
 
 A batch is not an all-or-nothing transaction. Cancellation, an error, or an interruption can leave some entries applied and others untouched. The per-entry record and result report identify progress; do not assume that canceling a running batch reverts earlier entries. Keep its backup.
 
-After applying, read the counts and messages, rescan, and inspect quality throughout the project. Review the source-control diff before committing. Source image pixels are not rewritten by this tool; importer metadata changes still affect every consumer of the asset.
+After applying, read the report, rescan, and inspect quality across all consumers. Imported image source pixels are untouched; importer metadata changes affect every consumer. Supported native `.asset` textures instead have their pixels resized in place.
 
 ## 5. Restore the latest batch
 
@@ -124,7 +151,7 @@ After applying, read the counts and messages, rescan, and inspect quality throug
 4. Click **Restore safe matching entries** to restore entries that still safely match the optimizer-owned state.
 5. Read the report, rescan, and review your project and source-control diff.
 
-Restore recovers the recorded target's previous resolution/override settings for safe matching entries. It does not replace source images, revert arbitrary unrelated project changes, or force later edits back to an old snapshot. An importer already matching the original state is treated as already restored.
+Imported textures restore recorded resolution/override settings for safe matching entries, not source images or unrelated edits. An importer already matching its original state is treated as restored. Native textures restore the exact saved original `.asset` bytes only when all identity/content guards match.
 
 ### Conflicts are protection, not permission to overwrite
 
@@ -134,7 +161,7 @@ Keep the report and backup. Compare the asset's current Inspector settings and s
 
 ### Backup limitations
 
-- Backups are **local, per project**, under `UserSettings/ProkjsTextureOptimizerBackups/`. They record importer restoration data, not copies of source images.
+- Backups are **local, per project**, under `UserSettings/ProkjsTextureOptimizerBackups/`. Imported textures store importer restoration data, not source-image copies. Supported native textures also store original `.asset` bytes; retain those files.
 - Your version-control or backup configuration may exclude `UserSettings`; do not assume teammates or another computer have these records.
 - The window offers **only the latest saved batch**, not a history picker. Restoring it does not expose a previous batch as the next automatic undo step. Keep source-control history for multi-batch recovery.
 - Records are tied to the original project location. Moving/cloning a project does not make its records portable recovery files; use source control or your project backup for that case.
@@ -166,7 +193,7 @@ When removing an old standalone version, locate the old optimizer scripts, not a
 | Partial/canceled apply or restore | Read entry counts/messages, retain the backup, and inspect current state. Already completed entries are not automatically rolled back. |
 | Restore conflict | Preserve the later edit. Review the backup and source-control history manually; do not force the backup to match. |
 
-For support, [open an issue](https://github.com/prokjs/texture-optimizer/issues) with the package version, exact Unity version, install method, scope/target, messages, and reproduction steps. Review backup records and logs for private paths before sharing. See the [README's release verification](../README.md#release-verification) for the exact tested Unity version and workflow; no device memory or performance measurements are claimed.
+For support, [open an issue](https://github.com/prokjs/texture-optimizer/issues) with package/Unity version, installation route, scope/target, messages, and reproduction steps. Review records for private paths before sharing. Historical texture checks do not verify all v1.1.0 features; no device memory or performance measurements are claimed.
 
 ## Credits
 
