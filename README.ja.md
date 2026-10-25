@@ -1,4 +1,4 @@
-# prokjs's VRChat World Optimizer — v1.1.0
+# prokjs's VRChat World Optimizer — v1.2.0
 
 **言語:** [EN](README.md) · [한국어](README.ko.md) · 日本語
 
@@ -7,6 +7,8 @@
 **変更する前に、テクスチャの解像度上限を確認しましょう。** prokjs が独自に開発したスタンドアロンの Unity Editor ツールです。インポート済みテクスチャを探し、推定 GPU メモリ割り当て量を比較し、復元手段を確保したうえでインポーターの解像度上限を意図的に引き下げられます。
 
 **Tools → prokjs → VRChat World Optimizer** から開きます。**Textures**、**LOD & Analysis**、**Occlusion & Shadows** の統合ウィンドウです。開いたりスキャンしたりするだけで変更やベイクは実行されません。
+
+**User guide** の横にある言語ドロップダウンで **English**、**日本語**、**한국어** を選択できます。初期値は英語で、選択は EditorPrefs に保存します。再スキャンせず、チェックした行、提案上限、LOD 設定、現在のプレビュープランを消さずに全タブ、表、プレビュー、確認画面を即座に更新します。ガイドボタンも選択した言語の文書を開きます。オブジェクト名、パス、元の証拠はそのまま維持し、未認識の外部例外メッセージは英語のまま表示します。以下の説明では英語の操作名を使用します。
 
 - 読み込み済みシーン、選択したオブジェクト、Assets 内のフォルダー、または Assets 内のプロジェクト全体のテクスチャアセットをスキャンできます。
 - 元画像のサイズ、読み込み済みのサイズと形式、Default / Standalone / Android の上限、安全上の制限を一つの表で確認できます。
@@ -23,7 +25,7 @@ VRChat プロジェクトを想定していますが、パッケージは VRChat
 
 ### バージョンとアップグレード
 
-**1.1.0** は既存ツールの拡張です。リポジトリ `prokjs/texture-optimizer`、パッケージ `com.prokjs.texture-optimizer`、名前空間 `Prokjs.TextureOptimizer`、既存のテクスチャバックアップ先を維持します。過去の 1.0.0 のテクスチャ検証は、新しい LOD／照明機能の検証ではありません。
+**1.2.0** は既存の World Optimizer に 3 言語の UI を追加します。新しいパッケージではなく、リポジトリ `prokjs/texture-optimizer`、パッケージ `com.prokjs.texture-optimizer`、名前空間 `Prokjs.TextureOptimizer`、既存のテクスチャバックアップ先と最適化の安全規則を維持します。過去の 1.0.0 のテクスチャ検証は、その後の LOD／照明／言語機能の検証ではありません。
 
 ## インストール — 方法は一つだけ選択
 
@@ -31,8 +33,8 @@ VRChat プロジェクトを想定していますが、パッケージは VRChat
 
 ### 方法 1: GitHub リリースの `.unitypackage`
 
-1. [v1.1.0 リリース](https://github.com/prokjs/texture-optimizer/releases/tag/v1.1.0)を開きます。
-2. **Assets** から **`prokjs-texture-optimizer-1.1.0.unitypackage`** をダウンロードします。「Source code」の ZIP/TAR は Unity インポート用ではありません。
+1. [v1.2.0 リリース](https://github.com/prokjs/texture-optimizer/releases/tag/v1.2.0)を開きます。
+2. **Assets** から **`prokjs-texture-optimizer-1.2.0.unitypackage`** をダウンロードします。「Source code」の ZIP/TAR は Unity インポート用ではありません。
 3. Unity で **Assets → Import Package → Custom Package…** を選び、ダウンロードした `.unitypackage` を選択して内容をインポートします。
 4. コンパイル後、**Tools → prokjs → VRChat World Optimizer** を開きます。
 
@@ -41,10 +43,10 @@ VRChat プロジェクトを想定していますが、パッケージは VRChat
 Unity で **Window → Package Manager → + → Add package from git URL…** を開き、次の URL を入力します。
 
 ```text
-https://github.com/prokjs/texture-optimizer.git#v1.1.0
+https://github.com/prokjs/texture-optimizer.git#v1.2.0
 ```
 
-`com.prokjs.texture-optimizer` を v1.1.0 に固定してインストールします。Unity の Git インストールには Git が必要です。
+`com.prokjs.texture-optimizer` を v1.2.0 に固定してインストールします。Unity の Git インストールには Git が必要です。
 
 ### 方法 3: VRChat Creator Companion（VCC）
 
@@ -55,7 +57,7 @@ https://github.com/prokjs/texture-optimizer.git#v1.1.0
    https://prokjs.github.io/texture-optimizer/index.json
    ```
 
-3. リポジトリを有効にし、**Manage Project** で **prokjs's VRChat World Optimizer** (`com.prokjs.texture-optimizer`) の **1.1.0** を追加します。
+3. リポジトリを有効にし、**Manage Project** で **prokjs's VRChat World Optimizer** (`com.prokjs.texture-optimizer`) の **1.2.0** を追加します。
 4. **Tools → prokjs → VRChat World Optimizer** を開きます。
 
 VCC は任意のインストール手段であり、実行時の依存関係ではありません。

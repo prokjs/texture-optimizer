@@ -1,8 +1,8 @@
 {
   "name": "com.prokjs.texture-optimizer",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "displayName": "prokjs's VRChat World Optimizer",
-  "url": "https://github.com/prokjs/texture-optimizer/releases/download/v1.1.0/com.prokjs.texture-optimizer-1.1.0.zip",
+  "url": "https://github.com/prokjs/texture-optimizer/releases/download/v1.2.0/com.prokjs.texture-optimizer-1.2.0.zip",
   "description": "Editor-only VRChat world optimization: reversible texture optimization, conservative mesh LOD analysis and generation, static occlusion setup, and floor-shadow lighting preparation with explicit bake controls.",
   "unity": "2022.3",
   "license": "MIT",

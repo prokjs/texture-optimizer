@@ -1,4 +1,4 @@
-# prokjs's VRChat World Optimizer v1.1.0 user guide
+# prokjs's VRChat World Optimizer v1.2.0 user guide
 
 **Languages:** English · [한국어](user-guide.ko.md) · [日本語](user-guide.ja.md)
 
@@ -9,6 +9,10 @@ VRChat projects are the intended audience. The package itself has no VRChat SDK 
 An Editor-only unified window for textures, LOD analysis/generation, and occlusion/floor-shadow preparation. Opening the window does not scan, apply, or bake automatically. The package identity remains `com.prokjs.texture-optimizer`.
 
 For installation, requirements, and version-pinned package URLs, see the [README](../README.md#install--choose-one-method). Install only one copy using one installation method. Remove older standalone optimizer scripts before installing.
+
+## Interface language
+
+Use the **English / 日本語 / 한국어** dropdown beside **User guide** at the top of the window. English is the default; the choice is stored in EditorPrefs and survives closing the window or restarting Unity. Changing language immediately refreshes both controllers, including table headers, safety messages, dialogs and open previews. It does not rescan, clear checkboxes, discard the current LOD plan, or change proposed caps or configuration. **User guide** opens the matching translated guide. Names, asset/hierarchy paths and source evidence are preserved verbatim; unknown Unity, OS or third-party exception text keeps its original English wording. Instructions below use English labels so they can be matched by selecting **English**.
 
 ## Unified workflow: LOD & Analysis
 
@@ -193,7 +197,7 @@ When removing an old standalone version, locate the old optimizer scripts, not a
 | Partial/canceled apply or restore | Read entry counts/messages, retain the backup, and inspect current state. Already completed entries are not automatically rolled back. |
 | Restore conflict | Preserve the later edit. Review the backup and source-control history manually; do not force the backup to match. |
 
-For support, [open an issue](https://github.com/prokjs/texture-optimizer/issues) with package/Unity version, installation route, scope/target, messages, and reproduction steps. Review records for private paths before sharing. Historical texture checks do not verify all v1.1.0 features; no device memory or performance measurements are claimed.
+For support, [open an issue](https://github.com/prokjs/texture-optimizer/issues) with package/Unity version, installation route, interface language, scope/target, messages, and reproduction steps. Review records for private paths before sharing. Historical texture checks do not verify all newer features; no device memory or performance measurements are claimed.
 
 ## Credits
 

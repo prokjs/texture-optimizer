@@ -98,7 +98,7 @@ public static class WorldOcclusionOptimizerBackend
         string temporary = ReceiptPath + ".tmp";
         File.WriteAllText(temporary, JsonUtility.ToJson(receipt, true));
         if (File.Exists(ReceiptPath)) File.Replace(temporary, ReceiptPath, null); else File.Move(temporary, ReceiptPath);
-        Undo.RecordObject(obj, "Set occluder flag");
+        Undo.RecordObject(obj, WorldOptimizerLocalization.Tr("Set occluder flag"));
         GameObjectUtility.SetStaticEditorFlags(obj, after);
         PrefabUtility.RecordPrefabInstancePropertyModifications(obj);
         EditorSceneManager.MarkSceneDirty(obj.scene);
@@ -118,8 +118,8 @@ public static class WorldOcclusionOptimizerBackend
             return "Settings already restored (possibly by Undo).";
         if (current != receipt.after || receipt.floor && (renderer == null || (int)renderer.receiveGI != receipt.receiveAfter))
             throw new InvalidOperationException("Settings changed after this tool's edit; restore refused to preserve your changes.");
-        Undo.RecordObject(obj, "Restore optimizer scene settings");
-        if (receipt.floor) { Undo.RecordObject(renderer, "Restore floor lightmap mode"); renderer.receiveGI = (ReceiveGI)receipt.receiveBefore; PrefabUtility.RecordPrefabInstancePropertyModifications(renderer); }
+        Undo.RecordObject(obj, WorldOptimizerLocalization.Tr("Restore optimizer scene settings"));
+        if (receipt.floor) { Undo.RecordObject(renderer, WorldOptimizerLocalization.Tr("Restore floor lightmap mode")); renderer.receiveGI = (ReceiveGI)receipt.receiveBefore; PrefabUtility.RecordPrefabInstancePropertyModifications(renderer); }
         GameObjectUtility.SetStaticEditorFlags(obj, (StaticEditorFlags)receipt.before);
         PrefabUtility.RecordPrefabInstancePropertyModifications(obj);
         EditorSceneManager.MarkSceneDirty(obj.scene);
@@ -157,7 +157,7 @@ public static class WorldOcclusionOptimizerBackend
         string temporary = ReceiptPath + ".tmp";
         File.WriteAllText(temporary, JsonUtility.ToJson(receipt, true));
         if (File.Exists(ReceiptPath)) File.Replace(temporary, ReceiptPath, null); else File.Move(temporary, ReceiptPath);
-        Undo.RecordObjects(new UnityEngine.Object[] { obj, renderer }, "Prepare baked floor shadows");
+        Undo.RecordObjects(new UnityEngine.Object[] { obj, renderer }, WorldOptimizerLocalization.Tr("Prepare baked floor shadows"));
         GameObjectUtility.SetStaticEditorFlags(obj, after);
         renderer.receiveGI = ReceiveGI.Lightmaps;
         PrefabUtility.RecordPrefabInstancePropertyModifications(obj);

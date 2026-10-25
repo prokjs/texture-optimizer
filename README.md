@@ -1,4 +1,4 @@
-# prokjs's VRChat World Optimizer — v1.1.0
+# prokjs's VRChat World Optimizer — v1.2.0
 
 **Languages:** English · [한국어](README.ko.md) · [日本語](README.ja.md)
 
@@ -7,6 +7,8 @@
 **Review texture resolution caps before you change them.** A standalone Unity Editor tool by prokjs for finding imported textures, comparing estimated GPU allocations, and applying deliberate, reversible importer-cap reductions.
 
 Open **Tools → prokjs → VRChat World Optimizer**. The unified window has **Textures**, **LOD & Analysis**, and **Occlusion & Shadows** tabs. Opening it does not scan, apply changes, or bake automatically.
+
+Choose **English**, **日本語**, or **한국어** from the language dropdown beside **User guide**. English is the default. The choice persists in EditorPrefs and refreshes all tabs, tables, previews and confirmations immediately without rescanning or clearing checked rows, proposed caps, LOD settings or the current preview plan. The guide button opens the matching language. Object names, paths and source evidence stay unchanged; unrecognized external exception text remains in English. This guide uses the English control labels.
 
 - Scan loaded scenes, selected objects, an Assets folder, or all project texture assets under Assets.
 - Review source dimensions, loaded dimensions and format, Default / Standalone / Android caps, and safety restrictions in one table.
@@ -23,7 +25,7 @@ VRChat projects are the intended audience, but the package has no VRChat SDK dep
 
 ### Version and upgrade identity
 
-Version **1.1.0** expands the existing Texture Optimizer; it is not a new package. The repository remains `prokjs/texture-optimizer`, the package remains `com.prokjs.texture-optimizer`, and the assembly namespace remains `Prokjs.TextureOptimizer`. Existing texture backup paths are preserved. Historical v1.0.0 texture checks are not verification of the new LOD or lighting workflows.
+Version **1.2.0** adds the three-language interface to the existing World Optimizer; it is not a new package. The repository remains `prokjs/texture-optimizer`, the package remains `com.prokjs.texture-optimizer`, and the assembly namespace remains `Prokjs.TextureOptimizer`. Existing texture backup paths and optimization safety rules are preserved. Historical v1.0.0 texture checks are not verification of the newer LOD, lighting or language workflows.
 
 ## Install — choose ONE method
 
@@ -31,8 +33,8 @@ Do not combine a `.unitypackage` import with a UPM or VCC installation. If you p
 
 ### Option 1: GitHub release `.unitypackage`
 
-1. Open the [v1.1.0 release](https://github.com/prokjs/texture-optimizer/releases/tag/v1.1.0).
-2. Download **`prokjs-texture-optimizer-1.1.0.unitypackage`** from the release's **Assets**. GitHub's “Source code” ZIP/TAR downloads are not the Unity import package.
+1. Open the [v1.2.0 release](https://github.com/prokjs/texture-optimizer/releases/tag/v1.2.0).
+2. Download **`prokjs-texture-optimizer-1.2.0.unitypackage`** from the release's **Assets**. GitHub's “Source code” ZIP/TAR downloads are not the Unity import package.
 3. In Unity, choose **Assets → Import Package → Custom Package…**, select the downloaded `.unitypackage`, and import its contents.
 4. Let Unity compile, then open **Tools → prokjs → VRChat World Optimizer**.
 
@@ -41,10 +43,10 @@ Do not combine a `.unitypackage` import with a UPM or VCC installation. If you p
 In Unity, open **Window → Package Manager → + → Add package from git URL…** and enter:
 
 ```text
-https://github.com/prokjs/texture-optimizer.git#v1.1.0
+https://github.com/prokjs/texture-optimizer.git#v1.2.0
 ```
 
-This installs `com.prokjs.texture-optimizer` pinned to v1.1.0. A working Git installation is required by Unity's Git package workflow.
+This installs `com.prokjs.texture-optimizer` pinned to v1.2.0. A working Git installation is required by Unity's Git package workflow.
 
 ### Option 3: VRChat Creator Companion (VCC)
 
@@ -55,7 +57,7 @@ This installs `com.prokjs.texture-optimizer` pinned to v1.1.0. A working Git ins
    https://prokjs.github.io/texture-optimizer/index.json
    ```
 
-3. Enable the repository. Open **Manage Project**, find **prokjs's VRChat World Optimizer** (`com.prokjs.texture-optimizer`), and add version **1.1.0**.
+3. Enable the repository. Open **Manage Project**, find **prokjs's VRChat World Optimizer** (`com.prokjs.texture-optimizer`), and add version **1.2.0**.
 4. Open Unity and use **Tools → prokjs → VRChat World Optimizer**.
 
 VCC is an optional installation route, not a runtime dependency.

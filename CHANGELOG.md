@@ -1,5 +1,15 @@
 # Changelog
 
+## [1.2.0] — 2026-10-25
+
+- Added **English / 日本語 / 한국어** beside **User guide**, with English as the default and a persistent EditorPrefs choice.
+- Localized the combined texture, LOD/analysis and occlusion/shadow interface: controls, tabs, headers, dialogs, safety restrictions, progress, status reports and preview notices.
+- Language changes refresh both controllers and open texture previews without rescanning, clearing checked rows, changing configuration or discarding the active LOD preview plan.
+- Preserved object names, paths, source evidence and canonical backup/receipt values. Unrecognized external exception text falls back to its original English.
+- Updated version-pinned downloads and all three installation/user guides. Package identity, optimization algorithms and safety thresholds are unchanged.
+
+[1.2.0]: https://github.com/prokjs/texture-optimizer/releases/tag/v1.2.0
+
 ## [1.1.0] — 2026-10-25
 
 - Rebranded as **prokjs's VRChat World Optimizer** with one **Tools → prokjs → VRChat World Optimizer** window: **Textures**, **LOD & Analysis**, **Occlusion & Shadows**.

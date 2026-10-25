@@ -1,4 +1,4 @@
-# prokjs's VRChat World Optimizer v1.1.0 사용 설명서
+# prokjs's VRChat World Optimizer v1.2.0 사용 설명서
 
 [EN](user-guide.md) · [한국어](user-guide.ko.md) · [日本語](user-guide.ja.md)
 
@@ -9,6 +9,10 @@ VRChat 프로젝트를 대상으로 제작했지만 패키지 자체는 VRChat S
 텍스처, LOD 분석/생성, 오클루전/바닥 그림자 준비를 제공하는 Editor 전용 통합 창입니다. 창을 열어도 스캔/적용/베이크하지 않습니다. 패키지 ID는 `com.prokjs.texture-optimizer`를 유지합니다.
 
 설치 방법, 요구 사항 및 특정 버전으로 고정된 패키지 URL은 [README](../README.ko.md)를 참고하세요. 한 가지 설치 방법으로 한 사본만 설치하세요. 설치 전에 기존 독립형 최적화 스크립트를 제거하세요.
+
+## 인터페이스 언어
+
+창 상단 **User guide** 옆의 **English / 日本語 / 한국어** 드롭다운을 사용하세요. 기본값은 영어이며 선택은 EditorPrefs에 저장되어 창을 닫거나 Unity를 재시작해도 유지됩니다. 언어를 바꾸면 표 머리글, 안전 메시지, 대화상자 및 열린 미리 보기를 포함해 두 컨트롤러가 즉시 갱신됩니다. 다시 스캔하거나 체크박스를 지우거나 현재 LOD 계획을 폐기하거나 제안 상한/설정을 변경하지 않습니다. **User guide**는 선택한 언어의 문서를 엽니다. 이름, 에셋/계층 경로 및 원본 증거는 그대로 보존하며 알 수 없는 Unity, OS 또는 외부 예외 메시지는 원래 영어를 유지합니다. 아래 설명은 영어 이름을 사용하므로 **English**를 선택하면 이름을 일치시킬 수 있습니다.
 
 ## 통합 작업: LOD & Analysis
 

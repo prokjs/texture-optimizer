@@ -125,7 +125,7 @@ public static class WorldLodOptimizerBackend
     }
     private static void Progress(string detail, int index, int count)
     {
-        if (EditorUtility.DisplayCancelableProgressBar(Operation, detail, count == 0 ? 0f : (float)index / count))
+        if (EditorUtility.DisplayCancelableProgressBar(WorldOptimizerLocalization.Tr(Operation), WorldOptimizerLocalization.Tr(detail), count == 0 ? 0f : (float)index / count))
             throw new OperationCanceledException("LOD operation canceled; no further objects were processed.");
     }
     private static GameObject[] ScopeRoots(ScanOptions options)
@@ -480,7 +480,7 @@ public static class WorldLodOptimizerBackend
             SaveReceipt(receipt, receiptPath);
             Undo.IncrementCurrentGroup();
             undoGroup = Undo.GetCurrentGroup();
-            Undo.SetCurrentGroupName(Operation);
+            Undo.SetCurrentGroupName(WorldOptimizerLocalization.Tr(Operation));
             var assets = new Dictionary<Mesh, Mesh>();
             int index = 0;
             foreach (Mesh preview in plan.meshes.Select(p => p.mesh).Distinct())
@@ -508,7 +508,7 @@ public static class WorldLodOptimizerBackend
                     group.fadeMode = LODFadeMode.None;
                     group.animateCrossFading = false;
                 }
-                else Undo.RegisterCompleteObjectUndo(group, Operation);
+                else Undo.RegisterCompleteObjectUndo(group, WorldOptimizerLocalization.Tr(Operation));
                 entry.group = Id(group);
                 SaveReceipt(receipt, receiptPath);
                 LOD[] before = row.group == null ? new LOD[0] : group.GetLODs();
@@ -523,7 +523,7 @@ public static class WorldLodOptimizerBackend
                     foreach (PreviewMesh preview in plan.meshes.Where(p => row.sources.Contains(p.renderer) && p.level == level))
                     {
                         GameObject go = CreateProxyInScene(ProxyPrefix + level + "_" + receipt.id + "_" + preview.renderer.name, preview.renderer.gameObject.scene);
-                        Undo.RegisterCreatedObjectUndo(go, Operation);
+                        Undo.RegisterCreatedObjectUndo(go, WorldOptimizerLocalization.Tr(Operation));
                         go.layer = preview.renderer.gameObject.layer;
                         go.tag = "Untagged";
                         go.transform.SetParent(preview.renderer.transform, false);
@@ -594,7 +594,7 @@ public static class WorldLodOptimizerBackend
         var messages = new List<string>();
         Undo.IncrementCurrentGroup();
         int undo = Undo.GetCurrentGroup();
-        Undo.SetCurrentGroupName("Restore LOD optimizer batch");
+        Undo.SetCurrentGroupName(WorldOptimizerLocalization.Tr("Restore LOD optimizer batch"));
         try
         {
             for (int i = receipt.entries.Count - 1; i >= 0; i--)
@@ -616,7 +616,7 @@ public static class WorldLodOptimizerBackend
                 if (entry.createdGroup) Undo.DestroyObjectImmediate(group);
                 else
                 {
-                    Undo.RegisterCompleteObjectUndo(group, "Restore LOD optimizer batch");
+                    Undo.RegisterCompleteObjectUndo(group, WorldOptimizerLocalization.Tr("Restore LOD optimizer batch"));
                     RestoreGroup(group, entry.before);
                     PrefabUtility.RecordPrefabInstancePropertyModifications(group);
                     EditorUtility.SetDirty(group);

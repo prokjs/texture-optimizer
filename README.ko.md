@@ -1,4 +1,4 @@
-# prokjs's VRChat World Optimizer — v1.1.0
+# prokjs's VRChat World Optimizer — v1.2.0
 
 [EN](README.md) · [한국어](README.ko.md) · [日本語](README.ja.md)
 
@@ -7,6 +7,8 @@
 **텍스처 해상도 상한을 변경하기 전에 내용을 확인하세요.** prokjs가 독립적으로 개발한 Unity Editor 전용 도구로, 임포트된 텍스처를 찾고 GPU 할당량 추정치를 비교한 뒤 복원 가능한 임포터 해상도 상한 축소를 사용자가 검토하여 적용할 수 있습니다.
 
 **Tools → prokjs → VRChat World Optimizer**에서 엽니다. **Textures**, **LOD & Analysis**, **Occlusion & Shadows** 탭을 사용하는 통합 Editor 창입니다. 창을 열거나 스캔하는 것만으로 변경이나 베이크가 자동 실행되지 않습니다.
+
+**User guide** 옆 언어 드롭다운에서 **English**, **日本語**, **한국어**를 선택하세요. 기본값은 영어이며 선택은 EditorPrefs에 저장됩니다. 다시 스캔하거나 체크한 항목, 제안 상한, LOD 설정 또는 현재 미리 보기 계획을 지우지 않고 모든 탭, 표, 미리 보기 및 확인 창이 즉시 갱신됩니다. 가이드 버튼도 선택한 언어의 문서를 엽니다. 오브젝트 이름, 경로 및 원본 증거는 그대로 유지하며 알 수 없는 외부 예외 메시지는 영어로 남습니다. 아래 설명은 영어 컨트롤 이름을 기준으로 합니다.
 
 - 로드된 씬, 선택한 오브젝트, Assets 아래 폴더 또는 Assets 아래 프로젝트 전체의 텍스처 에셋을 스캔합니다.
 - 원본 크기, 현재 로드된 크기와 포맷, Default / Standalone / Android 상한 및 안전 제한을 한 표에서 확인합니다.
@@ -23,7 +25,7 @@ VRChat 프로젝트를 대상으로 하지만 VRChat SDK에 의존하지 않습�
 
 ### 버전 및 업그레이드
 
-**1.1.0**은 기존 도구의 확장입니다. 저장소 `prokjs/texture-optimizer`, 패키지 `com.prokjs.texture-optimizer`, 네임스페이스 `Prokjs.TextureOptimizer` 및 기존 텍스처 백업 경로를 유지합니다. 과거 1.0.0 텍스처 검증은 새 LOD/조명 기능의 검증을 의미하지 않습니다.
+**1.2.0**은 기존 World Optimizer에 3개 언어 UI를 추가합니다. 새 패키지가 아니며 저장소 `prokjs/texture-optimizer`, 패키지 `com.prokjs.texture-optimizer`, 네임스페이스 `Prokjs.TextureOptimizer`, 기존 텍스처 백업 경로와 최적화 안전 규칙을 유지합니다. 과거 1.0.0 텍스처 검증은 이후 LOD/조명/언어 기능의 검증을 의미하지 않습니다.
 
 ## 설치 — 한 가지 방법만 선택
 
@@ -31,8 +33,8 @@ VRChat 프로젝트를 대상으로 하지만 VRChat SDK에 의존하지 않습�
 
 ### 방법 1: GitHub 릴리스 `.unitypackage`
 
-1. [v1.1.0 릴리스](https://github.com/prokjs/texture-optimizer/releases/tag/v1.1.0)를 엽니다.
-2. **Assets**에서 **`prokjs-texture-optimizer-1.1.0.unitypackage`**를 다운로드합니다. “Source code” ZIP/TAR는 Unity 임포트 패키지가 아닙니다.
+1. [v1.2.0 릴리스](https://github.com/prokjs/texture-optimizer/releases/tag/v1.2.0)를 엽니다.
+2. **Assets**에서 **`prokjs-texture-optimizer-1.2.0.unitypackage`**를 다운로드합니다. “Source code” ZIP/TAR는 Unity 임포트 패키지가 아닙니다.
 3. Unity에서 **Assets → Import Package → Custom Package…**를 선택하고 다운로드한 `.unitypackage`를 열어 내용을 임포트합니다.
 4. 컴파일 후 **Tools → prokjs → VRChat World Optimizer**를 엽니다.
 
@@ -41,10 +43,10 @@ VRChat 프로젝트를 대상으로 하지만 VRChat SDK에 의존하지 않습�
 Unity에서 **Window → Package Manager → + → Add package from git URL…**을 열고 다음을 입력합니다.
 
 ```text
-https://github.com/prokjs/texture-optimizer.git#v1.1.0
+https://github.com/prokjs/texture-optimizer.git#v1.2.0
 ```
 
-`com.prokjs.texture-optimizer`를 v1.1.0으로 고정하여 설치합니다. Unity Git 설치에는 Git이 필요합니다.
+`com.prokjs.texture-optimizer`를 v1.2.0으로 고정하여 설치합니다. Unity Git 설치에는 Git이 필요합니다.
 
 ### 방법 3: VRChat Creator Companion (VCC)
 
@@ -55,7 +57,7 @@ https://github.com/prokjs/texture-optimizer.git#v1.1.0
    https://prokjs.github.io/texture-optimizer/index.json
    ```
 
-3. 저장소를 활성화하고 **Manage Project**에서 **prokjs's VRChat World Optimizer** (`com.prokjs.texture-optimizer`) **1.1.0**을 추가합니다.
+3. 저장소를 활성화하고 **Manage Project**에서 **prokjs's VRChat World Optimizer** (`com.prokjs.texture-optimizer`) **1.2.0**을 추가합니다.
 4. **Tools → prokjs → VRChat World Optimizer**를 엽니다.
 
 VCC는 선택 가능한 설치 방법이며 런타임 의존성이 아닙니다.

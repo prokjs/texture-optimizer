@@ -2,7 +2,7 @@
 """Build the allowlisted Unity/VPM release with Python 3.10+ (standard library only).
 
 Run from any directory:
-  python Tools/build_release.py --repo-url https://github.com/prokjs/texture-optimizer --version 1.1.0
+  python Tools/build_release.py --repo-url https://github.com/prokjs/texture-optimizer --version 1.2.0
 
 The script never executes Unity, modifies source assets, or publishes anything.
 VPM schema references: https://vcc.docs.vrchat.com/vpm/repos/ and
@@ -38,6 +38,7 @@ REQUIRED_FILES = (
     "Editor/WorldLodMeshReducer.cs",
     "Editor/WorldOcclusionOptimizerBackend.cs",
     "Editor/WorldOptimizerPolicy.cs",
+    "Editor/WorldOptimizerLocalization.cs",
     "README.md",
     "README.ko.md",
     "README.ja.md",
@@ -300,7 +301,7 @@ def build(args):
 def main():
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--repo-url", required=True, help="Public HTTPS GitHub repository URL")
-    parser.add_argument("--version", required=True, help="Must match package.json, e.g. 1.1.0")
+    parser.add_argument("--version", required=True, help="Must match package.json, e.g. 1.2.0")
     parser.add_argument("--listing-url", help="Custom Pages listing URL (default: OWNER.github.io/REPOSITORY/index.json)")
     parser.add_argument("--previous-listing", help="Existing deployed index.json to merge, preserving prior release versions")
     parser.add_argument("--output", default="dist", help="Artifact directory, relative to the repository root")

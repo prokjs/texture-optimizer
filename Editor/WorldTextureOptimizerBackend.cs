@@ -99,7 +99,7 @@ public static class WorldTextureOptimizerBackend
     }
     private static bool Cancel(bool progress, string operation, string detail, int index, int count)
     {
-        return progress && EditorUtility.DisplayCancelableProgressBar(operation, detail, count == 0 ? 0 : (float)index / count);
+        return progress && EditorUtility.DisplayCancelableProgressBar(WorldOptimizerLocalization.Tr(operation), detail, count == 0 ? 0 : (float)index / count);
     }
 
     /// <summary>Read-only. Scans only on an explicit call; caller owns refreshing stale rows.</summary>
